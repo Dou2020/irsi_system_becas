@@ -533,7 +533,6 @@ def import_csv():
                     
                     if existe:
                         errores.append(f"Fila {row_num}: Ya existe un solicitante con documento {row['documento']} o email {row.get('emails', '')}")
-                        continue
                     
                     # Crear nuevo solicitante
                     solicitante = Solicitante(
