@@ -26,6 +26,45 @@ jobs:
   #       run: |
   #         flake8 . --max-line-length=120 --ignore=E305,E0302
 
+  dependency-check:
+    name: Análisis de dependencias (OWASP)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v3
+
+      - name: Ejecutar OWASP Dependency-Check
+        uses: dependency-check/Dependency-Check_Action@v2.1.3
+        with:
+          project: "Python App"
+          path: "."
+          format: "HTML"
+          out: "reports"
+
+      - name: Subir reporte
+        uses: actions/upload-artifact@v3
+        with:
+          name: dependency-check-report
+          path: reports
+
+  zap-scan:
+    name: Escaneo web (OWASP ZAP)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ejecutar ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.11.0
+        with:
+          target: 'http://localhost:8000'  # Asegúrate que tu app corra ahí
+          fail_action: false
+
+      - name: Subir reporte ZAP
+        uses: actions/upload-artifact@v3
+        with:
+          name: zap-report
+          path: owasp-zap-report.html
+
   test:
     name: Tests con pytest
     runs-on: ubuntu-latest
