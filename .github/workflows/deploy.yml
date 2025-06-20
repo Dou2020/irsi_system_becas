@@ -30,6 +30,9 @@ jobs:
     name: Tests con pytest
     runs-on: ubuntu-latest
 
+    env :
+      MAIL_DEFAULT_SENDER: ${ { secrets.MAIL_DEFAULT_SENDER } }
+
     steps:
       - name: Clonar repositorio
         uses: actions/checkout@v3
